@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="Description" content="Put your description here.">
+  <base href="/">
+
+  <style>
+  body {
+    font-family: Monospace;
+    text-align: center;
+  }
+
+  header {
+    background-color: #008aff;
+    color: white;
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .btn-wrapper {
+  margin: 24px auto;
+  }
+
+  .btn-wrapper button {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-family: Monospace;
+    font-size: 16px;
+    color: blue;
+    background-color: white;
+    transition: transform 0.3s;
+  }
+
+  .btn-wrapper button:hover,
+  .btn-wrapper button:focus {
+    font-size: 16px;
+    color: white;
+    background-color: #008aff;
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 799px) {
+    .btn-wrapper {
+      display: none;
+    }
+  }
+  </style>
+
+  <title>Clothing Card</title>
+</head>
+
+<body>
+  <header>
+    <h1>Clothing Store</h1>
+  </header>
+
+  <div class="btn-wrapper">
+    <button id="duplicate">Duplicate</button>
+    <button id="delcard">Delete card</button>
+    <button id="background">Toggle background color</button>
+    <button id="modifytitle">Change heading</button>
+  </div>
+  
+  <div id="app">
+    <clothing-card></clothing-card>
+  </div>
+  
+  <script type="module" src="./src/clothing-card.js"></script>
+  <script>
+//Duplicate Card
+const duplicateButton = document.querySelector('#duplicate')
+const allCardClones = [];
+
+duplicateButton.addEventListener('click', function() {
+    const arrivalCard = document.querySelector('clothing-card').shadowRoot.querySelector('#arrivals')
+    const cardClone = document.querySelector('clothing-card').cloneNode();
+    arrivalCard.insertAdjacentElement('afterend', cardClone);
+    allCardClones.push(cardClone);
+});
+
+//Delete Card
+const deleteButton = document.querySelector('#delcard')
+
+deleteButton.addEventListener('click', function() {
+    if (allCardClones.length > 0) {
+      const lastClonedCard = allCardClones.pop();
+      lastClonedCard.remove();
+    }
+});
+
+//Toggle background color
+const backgroundButton = document.querySelector('#background')
+
+backgroundButton.addEventListener('click', function() {
+    const arrivalCard = document.querySelector('clothing-card').shadowRoot.querySelector('#arrivals')
+    if (arrivalCard.classList.contains('blue-bg')) {
+      arrivalCard.classList.remove('blue-bg');    
+    }
+    else {
+      arrivalCard.classList.add('blue-bg');      
+    }
+});
+
+//Change heading
+const headingButton = document.querySelector('#modifytitle');
+
+headingButton.addEventListener('click', function() {
+  let name = prompt("Name the card:");
+
+  if(name) {
+    document.querySelector('clothing-card').clothing = name;
+  }
+});
+
+//Scale card on hover
+const allCards = document.querySelector('clothing-card').shadowRoot.querySelectorAll('.card'); 
+
+allCards.forEach(function(card) {           
+    card.addEventListener('mouseenter', function() {
+        card.style.backgroundColor = '#008aff';
+    });
+
+    card.addEventListener('mouseleave', function() {
+        card.style.backgroundColor = '';
+    });
+});
+  </script>
+</body>
+
+</html>
