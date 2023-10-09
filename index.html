@@ -51,6 +51,12 @@
       display: none;
     }
   }
+
+  clothing-card a {
+    color: #008aff;
+    background-color: black;
+    text-decoration: none;
+  }
   </style>
 
   <title>Clothing Card</title>
@@ -65,72 +71,50 @@
     <button id="duplicate">Duplicate</button>
     <button id="delcard">Delete card</button>
     <button id="background">Toggle background color</button>
-    <button id="modifytitle">Change heading</button>
+    <button id="modifytitle">Change name</button>
   </div>
   
   <div id="app">
-    <clothing-card></clothing-card>
+    <clothing-card information="These t-shirts have just arrived!"></clothing-card>
   </div>
   
   <script type="module" src="./src/clothing-card.js"></script>
   <script>
-//Duplicate Card
-const duplicateButton = document.querySelector('#duplicate')
-const allCardClones = [];
+    // duplicate card
+    const duplicateButton = document.querySelector('#duplicate')
 
-duplicateButton.addEventListener('click', function() {
-    const arrivalCard = document.querySelector('clothing-card').shadowRoot.querySelector('#arrivals')
-    const cardClone = document.querySelector('clothing-card').cloneNode();
-    arrivalCard.insertAdjacentElement('afterend', cardClone);
-    allCardClones.push(cardClone);
-});
-
-//Delete Card
-const deleteButton = document.querySelector('#delcard')
-
-deleteButton.addEventListener('click', function() {
-    if (allCardClones.length > 0) {
-      const lastClonedCard = allCardClones.pop();
-      lastClonedCard.remove();
-    }
-});
-
-//Toggle background color
-const backgroundButton = document.querySelector('#background')
-
-backgroundButton.addEventListener('click', function() {
-    const arrivalCard = document.querySelector('clothing-card').shadowRoot.querySelector('#arrivals')
-    if (arrivalCard.classList.contains('blue-bg')) {
-      arrivalCard.classList.remove('blue-bg');    
-    }
-    else {
-      arrivalCard.classList.add('blue-bg');      
-    }
-});
-
-//Change heading
-const headingButton = document.querySelector('#modifytitle');
-
-headingButton.addEventListener('click', function() {
-  let name = prompt("Name the card:");
-
-  if(name) {
-    document.querySelector('clothing-card').clothing = name;
-  }
-});
-
-//Scale card on hover
-const allCards = document.querySelector('clothing-card').shadowRoot.querySelectorAll('.card'); 
-
-allCards.forEach(function(card) {           
-    card.addEventListener('mouseenter', function() {
-        card.style.backgroundColor = '#008aff';
+    duplicateButton.addEventListener('click', function() {
+        const clothingCard = document.querySelector('clothing-card');
+        clothingCard.insertAdjacentElement('afterend', clothingCard.cloneNode(true));
     });
 
-    card.addEventListener('mouseleave', function() {
-        card.style.backgroundColor = '';
+    // delete card
+    const deleteButton = document.querySelector('#delcard')
+
+    deleteButton.addEventListener('click', function() {
+      const allCardClones = document.querySelectorAll('clothing-card');
+        if (allCardClones.length > 1) {
+          allCardClones[allCardClones.length - 1].remove();
+        }
     });
-});
+
+    // toggle background color
+    const backgroundButton = document.querySelector('#background')
+
+    backgroundButton.addEventListener('click', function() {
+      const clothingCard = document.querySelector('clothing-card');
+      clothingCard.variation = !clothingCard.variation;
+    });
+
+    // change name
+    const nameButton = document.querySelector('#modifytitle');
+
+    headingButton.addEventListener('click', function() {
+      let name = prompt("Name the card:");
+      if(name) {
+        document.querySelector('clothing-card').name = name;
+      }
+    });
   </script>
 </body>
 

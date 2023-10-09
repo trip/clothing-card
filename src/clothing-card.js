@@ -5,8 +5,13 @@ const tshirt = new URL('../assets/tshirt.jpg', import.meta.url).href;
 export class ClothingCard extends LitElement {
   static get properties() {
     return {
-      clothing: {
+      name: {
         type: String,
+        reflect: true
+      },
+
+      variation: {
+        type: Boolean,
         reflect: true
       },
 
@@ -18,6 +23,10 @@ export class ClothingCard extends LitElement {
 
   static get styles() {
     return css`
+    :host {
+      display: inline-block;
+    }
+    
     .cards {
       display: flex;
       max-width: 8000px;
@@ -37,7 +46,7 @@ export class ClothingCard extends LitElement {
       transition: transform 0.3s;
     }
 
-    .blue-bg {
+    :host([variation]) .card {
       background-color: #008aff;
     }
 
@@ -55,26 +64,34 @@ export class ClothingCard extends LitElement {
     .details {
       padding: 10px;
     }
+
+    .card-details-contents ::slotted(img) {
+      max-width: 100px;
+      display: block;
+      margin: 0 auto;
+    }
     `;
   }
 
   constructor() {
     super();
-    this.clothing = "T-Shirt";
-    this.information = "These t-shirts have just arrived";
+    this.name = "T-Shirt";
+    this.variation = false;
+    this.information = null;
   }
 
   render() {
     return html`
       <div class="cards">
-        <section class="card" id="arrivals">
+        <section class="card">
           <div class="card-info">
-            <h2 id="arrival-heading">${this.clothing}</h2>
+            <h2>${this.name}</h2>
             <img src="${tshirt}">
             <details class="details">
               <summary>Details</summary>
-                <div>
-                  <p id="p1">${this.information}</p>
+                <div class="card-details-contents">
+                  <p>${this.information}</p>
+                  <slot></slot>
                 </div>
             </details>
           </div>
